@@ -10,8 +10,9 @@ Select a team captain (with or without help from mentor/instructor/supervisor)
 
 Record your names here in this format-
 1. Team captain name, UNI
-2. Member name, UNI
+2. Yueming Xu, yx2930
 3. Member name, UNI
+4. 
 
 and so on.   
 
