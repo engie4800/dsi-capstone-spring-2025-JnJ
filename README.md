@@ -11,8 +11,8 @@ Select a team captain (with or without help from mentor/instructor/supervisor)
 Record your names here in this format-
 1. Ruibin Lyu, rl3501
 2. Yueming Xu, yx2930
-3. Member name, UNI
-4. 
+3. Kevin Cai, qc2357
+4. Matt Xi, yx2933
 
 and so on.   
 
