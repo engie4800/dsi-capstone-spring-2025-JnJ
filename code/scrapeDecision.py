@@ -48,12 +48,14 @@ def scrape_guidance_details(guidance_url):
     
     decision = "null"
 
-    if " is recommended" in recommendations_text:
-        decision = "Recommend"
-    elif " not recommended" in recommendations_text:
-        decision = "Not Recommend"
+    if " not recommended" in recommendations_text:
+        decision = "Rejected"
+    elif "only if" in recommendations_text:
+        decision = "Conditional"
+    elif " is recommended" in recommendations_text:
+        decision = "Approved"
     else:
-        decision = "Unable to Make Any Recommendation"
+        decision = "Rejected"
 
     return title, recommendations_text, decision
 
@@ -66,10 +68,10 @@ if __name__ == "__main__":
     data = []
     for link in guidance_links:
         title, recommendations, decision = scrape_guidance_details(link)
-        data.append({"Title": title, "Recommendation text": recommendations, "Decision": decision})
+        data.append({"Title": title, "Guidance URL": link, "Recommendation text": recommendations, "Decision": decision, "Committee Paper URL": link + "/documents/committee-papers"})
 
     df = pd.DataFrame(data)
 
-    df.to_csv("./guidance_decision.csv", index=False)
+    df.to_csv("./guidance_decisionACR_paperlink.csv", index=False)
 
     print(df.head)
