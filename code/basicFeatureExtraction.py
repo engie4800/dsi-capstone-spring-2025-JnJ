@@ -4,6 +4,13 @@ import requests
 import re
 import pdfplumber
 import os
+from openai import OpenAI
+
+# List of disease categories
+disease_categories = [
+    "Cardiovascular", "Chronic", "Nervous System", "Obstetrics/Gynaecology", "Urinary-Track Diseases", 
+    "Cancer", "Rare Disease (Orphan Drugs)", "Ultra-Rare Disease (Ultra Orphan Drugs)", "Musculoskeletal diseases"
+]
 
 def store_decision_dates():
     pdf_df = pd.read_csv("./guidance_decisionACR_paperlink_validation.csv")
@@ -83,10 +90,40 @@ def incorporate_application_date():
     basic_features_df = pd.read_csv("./basic_features.csv")
     basic_features_df["PDF File"] = basic_features_df["Title"].str.strip().replace(" ", "_", regex = True) + ".pdf"
     basic_features_df = basic_features_df.merge(date_df, on = "PDF File", how = "left")
+    basic_features_df = basic_features_df.rename(columns={'Extracted Date': 'Application Date'})
     basic_features_df.to_csv("basic_features_v2.csv", index = False)
     print("Updated CSV saved as 'basic_features_v2.csv'.")
+
+def classify_disease(title):
+    
+    api_key = os.getenv("OPENAI_API_KEY")
+    client = OpenAI(api_key=api_key)
+
+    prompt = f"""
+    Classify the disease mentioned in the following title into one or more types from the given categories:
+
+    Title: "{title}"
+
+    Disease Categories: {", ".join(disease_categories)}
+
+    Either return only the most relevant disease categories from the list or return NULL if there does not exist any suitable categories. Do not return extra words
+    """
+
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    return completion.choices[0].message.content
+
 
 
 if __name__ == "__main__":
     # store_decision_dates()
-    store_application_date()
+    # store_application_date()
+    # incorporate_application_date()
+    # df = pd.read_csv("./basic_features_v2.csv")
+    # df["Disease_Category"] = df["Title"].apply(classify_disease)
+    # df.to_csv("./basic_features_v2.csv", index=False)
+    # print(df.head())
+    pass
