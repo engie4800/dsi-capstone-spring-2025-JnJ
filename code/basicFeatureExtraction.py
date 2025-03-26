@@ -6,12 +6,6 @@ import pdfplumber
 import os
 from openai import OpenAI
 
-# List of disease categories
-disease_categories = [
-    "Cardiovascular", "Chronic", "Nervous System", "Obstetrics/Gynaecology", "Urinary-Track Diseases", 
-    "Cancer", "Rare Disease (Orphan Drugs)", "Ultra-Rare Disease (Ultra Orphan Drugs)", "Musculoskeletal diseases"
-]
-
 def store_decision_dates():
     pdf_df = pd.read_csv("./guidance_decisionACR_paperlink_validation.csv")
 
@@ -24,7 +18,6 @@ def store_decision_dates():
         decision_dates.append(decision_date)
 
     df_basic_features['Decision_Date'] = decision_dates
-    # print(df_basic_features.head())
     df_basic_features.to_csv("./basic_features.csv", index = False)
 
 def scrape_decision_date(link):
@@ -95,6 +88,11 @@ def incorporate_application_date():
     print("Updated CSV saved as 'basic_features_v2.csv'.")
 
 def classify_disease(title):
+    # List of disease categories
+    disease_categories = [
+        "Cardiovascular", "Chronic", "Nervous System", "Obstetrics/Gynaecology", "Urinary-Track Diseases", 
+        "Cancer", "Rare Disease (Orphan Drugs)", "Ultra-Rare Disease (Ultra Orphan Drugs)", "Musculoskeletal diseases"
+    ]
     
     api_key = os.getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=api_key)
@@ -106,7 +104,7 @@ def classify_disease(title):
 
     Disease Categories: {", ".join(disease_categories)}
 
-    Either return only the most relevant disease categories from the list or return NULL if there does not exist any suitable categories. Do not return extra words
+    Either return only the most relevant disease categories from the list or return "NULL" if there does not exist any suitable categories. Do not return extra words
     """
 
     completion = client.chat.completions.create(
@@ -114,16 +112,80 @@ def classify_disease(title):
         messages=[{"role": "user", "content": prompt}]
     )
     
-    return completion.choices[0].message.content
+    return completion.choices[0].message.content.strip()
 
+def classify_HT_via_LLM(title):
+    ht_categories = ["Drug", "Medical Device", "Other treatment"]
+    api_key = os.getenv("OPENAI_API_KEY")
+    client = OpenAI(api_key=api_key)
 
+    prompt = f"""
+    Classify the health technology mentioned in the following title into one type from the given categories:
+
+    Title: "{title}"
+
+    Disease Categories: {", ".join(ht_categories)}
+
+    Either return only the most relevant health technology categories from the list or return NULL if there does not exist any suitable categories. Do not return extra words
+    """
+
+    completion = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    return completion.choices[0].message.content.strip()
+
+def classify_HT_via_KeywordSearch():
+    pass
+
+def identify_innovation():
+    data = []
+
+    folder_path = "./downloaded_committee_papers"
+    
+    for pdf_filename in os.listdir(folder_path):
+        pdf_path = os.path.join(folder_path, pdf_filename)
+        
+        with pdfplumber.open(pdf_path) as pdf:
+            found_text = "NULL"
+            
+            for page in pdf.pages:
+                extracted_text = page.extract_text()
+                if extracted_text:
+                    match = re.search(r"\(see section 3f\)\n(.*?)(?=\n3k\))", extracted_text, re.DOTALL)
+                    if match:
+                        found_text = match.group(1).strip()
+                        break
+            
+            data.append({"PDF File": pdf_filename, "has_innovation": found_text})
+    
+    df = pd.DataFrame(data)
+    return df
+
+def incorporate_innovation():
+    innovation_df = pd.read_csv("./innovation_percentage.csv")
+    basic_features_df = pd.read_csv("./basic_features_v2.csv")
+    innovation_df = innovation_df.rename(columns={'pdf_file': 'PDF File'})
+    innovation_df = innovation_df.rename(columns={'percent_innovative': 'frac_eval_innovative'})
+    basic_features_df = basic_features_df.merge(innovation_df[["PDF File", "frac_eval_innovative"]], on = "PDF File", how = "left")
+    basic_features_df.to_csv("basic_features_v3.csv", index = False)
 
 if __name__ == "__main__":
-    # store_decision_dates()
-    # store_application_date()
-    # incorporate_application_date()
-    # df = pd.read_csv("./basic_features_v2.csv")
-    # df["Disease_Category"] = df["Title"].apply(classify_disease)
+    store_decision_dates()
+    store_application_date()
+    incorporate_application_date()
+    df = pd.read_csv("./basic_features_v2.csv")
+    df["Disease_Category"] = df["Title"].apply(classify_disease)
+    df["HT_Category"] = df["Title"].apply(classify_HT_via_LLM)
     # df.to_csv("./basic_features_v2.csv", index=False)
-    # print(df.head())
-    pass
+
+    # df = identify_innovation()
+    # df.to_csv("./filename_innovation.csv", index=False)
+
+    incorporate_innovation()
+    df_feature3 = pd.read_csv("./basic_features_v3.csv")
+    df_url = pd.read_csv("guidance_decisionACR_paperlink_validation.csv")  # or use your actual DataFrame
+    df_url["TA Code"] = df_url["Guidance URL"].str.extract(r'(ta\d+)$')
+    df_feature4 = df_feature3.merge(df_url[["Title", "TA Code", "is_valid_link"]], on="Title", how="left")
+    # df_feature4.to_csv("basic_features_v4.csv", index = False)
