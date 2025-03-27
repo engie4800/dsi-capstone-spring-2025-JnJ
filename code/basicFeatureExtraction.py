@@ -139,30 +139,6 @@ def classify_HT_via_LLM(title):
 def classify_HT_via_KeywordSearch():
     pass
 
-def identify_innovation():
-    data = []
-
-    folder_path = "./downloaded_committee_papers"
-    
-    for pdf_filename in os.listdir(folder_path):
-        pdf_path = os.path.join(folder_path, pdf_filename)
-        
-        with pdfplumber.open(pdf_path) as pdf:
-            found_text = "NULL"
-            
-            for page in pdf.pages:
-                extracted_text = page.extract_text()
-                if extracted_text:
-                    match = re.search(r"\(see section 3f\)\n(.*?)(?=\n3k\))", extracted_text, re.DOTALL)
-                    if match:
-                        found_text = match.group(1).strip()
-                        break
-            
-            data.append({"PDF File": pdf_filename, "has_innovation": found_text})
-    
-    df = pd.DataFrame(data)
-    return df
-
 def incorporate_innovation():
     innovation_df = pd.read_csv("./innovation_percentage.csv")
     basic_features_df = pd.read_csv("./basic_features_v2.csv")
@@ -179,10 +155,6 @@ if __name__ == "__main__":
     df["Disease_Category"] = df["Title"].apply(classify_disease)
     df["HT_Category"] = df["Title"].apply(classify_HT_via_LLM)
     # df.to_csv("./basic_features_v2.csv", index=False)
-
-    # df = identify_innovation()
-    # df.to_csv("./filename_innovation.csv", index=False)
-
     incorporate_innovation()
     df_feature3 = pd.read_csv("./basic_features_v3.csv")
     df_url = pd.read_csv("guidance_decisionACR_paperlink_validation.csv")  # or use your actual DataFrame
