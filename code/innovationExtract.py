@@ -7,6 +7,7 @@ from io import BytesIO
 import fitz
 import pandas as pd
 import time
+import numpy as np
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -133,11 +134,8 @@ if __name__ == "__main__":
             })
 
     df = pd.DataFrame(results)
-    print(df)
 
-    # df.to_csv("innovation_raw_answers.csv", index=False)
-
-    df = pd.read_csv("./innovation_raw_answers.csv", na_values=["NULL"])    
+    df.replace("NULL", np.nan, inplace=True)
 
     for i, row in df.iterrows():
         df.at[i, "percent_innovative"] = analyze_innovation_percentage(row["extracted_answer"])

@@ -1,5 +1,5 @@
 import os
-import fitz  # PyMuPDF
+import fitz
 import pdfplumber
 from PIL import Image
 from io import BytesIO
@@ -64,7 +64,7 @@ def find_last_occurrence_page(pdf_path, phrase):
             text = page.extract_text()
             if text and phrase in text.lower():
                 last_occurrence = i
-    return last_occurrence  # May be None if not found
+    return last_occurrence
 
 def render_pages_as_images(pdf_path, start_page, num_pages=5, dpi=200):
     doc = fitz.open(pdf_path)
