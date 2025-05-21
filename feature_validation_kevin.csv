@@ -1,0 +1,51 @@
+Title,Decision,Note,frac_eval_innovative,frac_eval_innovative(Actual Value),Disease_Category,Disease_Category (Actual Value),HT_Category,HT_Category (Actual Value),Number of Patients,Number of Patients (Actual Value),Number of RCTs,Number of RCTs (Actual Value),Number of Obserational Studies,Number of Observational Studies (Actual Value),Note
+Baricitinib for treating severe alopecia areata,Rejected,In sample test,1,1,,,,,1200,1200,2,2,,,
+Dupilumab for treating moderate to severe prurigo nodularis,Rejected,In sample test,1,1,,,,,311,311,2,2,,,
+Lorlatinib for untreated ALK-positive advanced non-small-cell lung cancer,Rejected,In sample test,0.67,0.67,,,,,296,296,1,1,,,
+Lutetium-177 vipivotide tetraxetan for treating PSMA-positive hormone-relapsed metastatic prostate cancer after 2 or more treatments,Rejected,In sample test,1,1,,,,,831,831,1,1,,,
+Tixagevimab plus cilgavimab for preventing COVID-19,Rejected,In sample test,0.5,1,,,,,5150,5150,2,1,,,
+Anhydrous sodium thiosulfate for preventing hearing loss caused by cisplatin chemotherapy in people 1 month to 17 years with localised solid tumours,Approved,In sample test,1,1,,,,,234,234,2,2,,,
+Bevacizumab gamma for treating wet age-related macular degeneration,Approved,In sample test,0.5,0.5,,,,,228,228,1,1,,,
+Crizotinib for treating ROS1-positive advanced non-small-cell lung cancer,Approved,In sample test,N/A,N/A,,,,,661,1352,8,0,,,
+Eplontersen for treating hereditary transthyretin-related amyloidosis,Approved,In sample test,1,1,,,,,361,166,2,1,,,
+Pembrolizumab for neoadjuvant and adjuvant treatment of triple-negative early or locally advanced breast cancer,Approved,In sample test,0,0,,,,,1172,1172,1,1,,,
+"Abatacept, adalimumab, etanercept and tocilizumab for treating juvenile idiopathic arthritis",Approved,,N/A,N/A,,,,,N/A,N/A,N/A,3,,,Can only access via Adobe; the number of patients is blocked
+"Abemaciclib with endocrine therapy for adjuvant treatment of hormone receptor-positive, HER2-negative, node-positive early breast cancer at high risk of recurrence",Approved,,1,1,,,,,5637,5637,1,1,,,
+Abiraterone for treating newly diagnosed high-risk hormone-sensitive metastatic prostate cancer,Rejected,,1,1,,,,,N/A,2213,N/A,2,,,"Doesn't exist the section ""study group"". Difficult to find out number of patients"
+Acalabrutinib for treating chronic lymphocytic leukaemia,Conditional,,0.67,1,,,,,310,1211,2,3,,,Involves many pages
+"Adalimumab, etanercept, infliximab and abatacept for treating moderate rheumatoid arthritis after conventional DMARDs have failed",Rejected,,1,1,,,,,N/A,N/A,N/A,N/A,,,No submission
+Alectinib for adjuvant treatment of ALK-positive non-small-cell lung cancer,Approved,,1,1,,,,,247,248,1,1,,,
+Amivantamab for treating EGFR exon 20 insertion mutation-positive advanced non-small-cell lung cancer after platinum-based chemotherapy,Rejected,,N/A,N/A,,,,,N/A,N/A,N/A,N/A,,,No submission
+Anakinra for treating Still’s disease,Approved,,1,1,,,,,204,61,1,3,,,Involves many pages
+Arsenic trioxide for treating acute promyelocytic leukaemia,Approved,,1,1,,,,,451,N/A,3,3,,,
+Atezolizumab in combination for treating metastatic non-squamous non-small-cell lung cancer,Approved,,0.5,0.5,,,,,1200,1200,1,1,,,
+Avapritinib for treating advanced systemic mastocytosis,Approved,,1,1,,,,,0,0,2,0,,,
+Avapritinib for treating unresectable or metastatic gastrointestinal stromal tumours (terminated appraisal),Rejected,,1,1,,,,,56,0,1,0,,,Cannot recognize whether a trial is RCT or not since not enough pages are provided to GPT
+Avatrombopag for treating primary chronic immune thrombocytopenia,Approved,,0.5,0.5,,,,,97,136,3,3,,,
+Axicabtagene ciloleucel for treating relapsed or refractory follicular lymphoma,Rejected,,N/A,1,,,,,359,0,1,0,,,
+Azacitidine for treating acute myeloid leukaemia with more than 30% bone marrow blasts,Rejected,,N/A,N/A,,,,,488,488,1,1,,,
+Beta interferons and glatiramer acetate for treating multiple sclerosis,Rejected,,N/A,N/A,,,,,N/A,N/A,N/A,N/A,,,No submission paper
+Bimekizumab for treating moderate to severe hidradenitis suppurativa (terminated appraisal),Rejected,,0.75,1,,,,,1014,1014,2,2,,,
+Baricitinib_for_moderate_to_severe_rheumatoid_arthritis.pdf,Conditional,,N/A,N/A,,,,,3700,2518,4,3,,,
+Belumosudil_for_treating_chronic_graft-versus-host_disease_after_2_or_more_systemic_treatments_in...,Conditional,,N/A,N/A,,,,,N/A,N/A,N/A,N/A,,,No Submission Paper
+Brolucizumab_for_treating_wet_age-related_macular_degeneration.pdf,Conditional,,0,0,,,,,1950,1906,3,3,,,Mentioned in a different section
+Cabozantinib_for_treating_medullary_thyroid_cancer.pdf,Conditional,,1,N/A,,,,,331,331,1,1,,,
+Cannabidiol_with_clobazam_for_treating_seizures_associated_with_Dravet_syndrome.pdf,Conditional,,0.5,0.5,,,,,N/A,318,N/A,2,,,
+Dapagliflozin_in_triple_therapy_for_treating_type_2_diabetes.pdf,Approved,,N/A,N/A,,,,,219,219,1,1,,,
+Daridorexant_for_treating_long-term_insomnia.pdf,Approved,,N/A,N/A,,,,,N/A,1734,N/A,2,,,
+"Dasatinib,_nilotinib_and_high-dose_imatinib_for_treating_imatinib-resistant_or_intolerant_chronic...",Approved,,N/A,N/A,,,,,N/A,N/A,N/A,N/A,,,No submission paper
+Degarelix_for_treating_advanced_hormone-dependent_prostate_cancer.pdf,Conditional,,N/A,N/A,,,,,N/A,N/A,N/A,N/A,,,No submission paper
+Dimethyl_fumarate_for_treating_moderate_to_severe_plaque_psoriasis.pdf,Approved,,N/A,N/A,,,,,690,690,1,1,,,
+Elbasvir–grazoprevir_for_treating_chronic_hepatitis_C.pdf,Conditional,,N/A,N/A,,,,,1584,1840,7,7,,,
+Encorafenib_with_binimetinib_for_unresectable_or_metastatic_BRAF_V600_mutation-positive_melanoma.pdf,Conditional,,0.5,0.5,,,,,576,576,4,1,,,
+Eribulin_for_treating_locally_advanced_or_metastatic_breast_cancer_after_2_or_more_chemotherapy_r...,Approved,,N/A,N/A,,,,,1710,1864,3,2,,,
+Everolimus_and_sunitinib_for_treating_unresectable_or_metastatic_neuroendocrine_tumours_in_people...,Approved,,N/A,N/A,,,,,N/A,N/A,N/A,N/A,,,No submission paper
+Ozanimod for treating relapsing–remitting multiple sclerosis,Rejected,,0.5,0.5,,,,,2408,2917,3,3,,,
+Zanubrutinib for treating marginal zone lymphoma after anti-CD20-based treatment,Approved,,1,1,,,,,20,0,0,0,,,No submission paper
+Vutrisiran for treating hereditary transthyretin-related amyloidosis,Conditional,,N/A,N/A,,,,,164,389,2,2,,,The number of trials in another trial is in a page that is far from the typical place
+Voclosporin with mycophenolate mofetil for treating lupus nephritis,Approved,,N/A,0.67,,,,,880,906,3,3,,,
+Vismodegib for treating basal cell carcinoma,Rejected,,N/A,N/A,,,,,0,0,0,0,,,
+Vibegron for treating symptoms of overactive bladder syndrome,Approved,,N/A,N/A,,,,,4612,4122,8,8,,,
+Vandetanib for treating medullary thyroid cancer,Rejected,,N/A,N/A,,,,,N/A,N/A,N/A,N/A,,,No submission paper
+Trastuzumab deruxtecan for treating HER2-low metastatic or unresectable breast cancer after chemotherapy,Rejected,,1,1,,,,,437,557,2,1,,,
+Tafasitamab with lenalidomide for treating relapsed or refractory diffuse large B-cell lymphoma,Rejected,,1,1,,,,,0,0,0,0,,,

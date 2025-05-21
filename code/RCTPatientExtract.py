@@ -66,7 +66,61 @@ def find_last_occurrence_page(pdf_path, phrase):
                 last_occurrence = i
     return last_occurrence
 
-def render_pages_as_images(pdf_path, start_page, num_pages=5, dpi=200):
+def find_page_with_llm(pdf_path, phrase):
+    page_num = None
+    prompt = """Answer the following questions based on the content of the page:
+
+    Question 1: Does this page contain a heading exactly called "Contents"?  
+    → If so, immediately respond with "No", explain why in one sentence, and skip the next question.
+
+    Otherwise, proceed to the next question:
+
+    Question 2: Does this page contain a visible section header that clearly represents section B.2 titled 'Clinical effectiveness' (e.g., 'B.2. Clinical effectiveness' or similar)?  
+
+    Final Rule:  
+    If the answer to Question 2 is yes, respond only with **"Yes"**.  
+    Otherwise, respond with **"No"** and explain why in one sentence.
+
+    When responding with "Yes", do not respond with anything else.
+    """
+    with pdfplumber.open(pdf_path) as pdf:
+        for i, page in enumerate(pdf.pages):
+            text = page.extract_text()
+            if text and phrase in text and ("B.2 Company evidence submission" in text or "B.2. Company evidence submission" in text):
+                page_num = i
+                print(page_num)
+    
+                doc = fitz.open(pdf_path)
+                page = doc[page_num]
+                pix = page.get_pixmap(dpi=300)
+                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                img = encode_image(img)
+                images = []
+                images.append({
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{img}"
+                    }
+                })
+
+                response = openai.chat.completions.create(
+                    model="gpt-4-turbo",
+                    messages=[
+                        {"role": "user", "content": [
+                            {"type": "text", "text": prompt}
+                        ] + images}
+                    ],
+                    max_tokens=300,
+                )
+                print(response.choices[0].message.content.strip())
+                if response.choices[0].message.content.strip() == "Yes":
+                    print(page_num)
+                    return page_num
+                else:
+                    continue
+    return None
+
+def render_pages_as_images(pdf_path, start_page, num_pages=10, dpi=300):
     doc = fitz.open(pdf_path)
     end_page = min(start_page + num_pages, len(doc))
     images = []
@@ -99,12 +153,20 @@ def parse_rct_summary(summary):
         patients = int(match.group(2))
     return rcts, patients
 
-def process_pdf_for_rcts(pdf_path, phrase):
-    last_occurrence_page = find_last_occurrence_page(pdf_path, phrase)
-    if last_occurrence_page is None:
-        return os.path.basename(pdf_path), None, None
+def process_pdf_for_rcts(pdf_path):
+    last_occurrence_page = find_last_occurrence_page(pdf_path, "Statistical analysis and definition of study groups in")
+    images = []
+    if last_occurrence_page:
+        images = render_pages_as_images(pdf_path, last_occurrence_page, num_pages=10)
 
-    images = render_pages_as_images(pdf_path, last_occurrence_page + 1, num_pages=5)
+    clinical_evidence_page = find_page_with_llm(pdf_path, "Clinical effectiveness")
+    additional_images = []
+    if clinical_evidence_page:
+        additional_images = render_pages_as_images(pdf_path, clinical_evidence_page, num_pages=5)
+
+    images.extend(additional_images)
+    if not images:
+        return os.path.basename(pdf_path), None, None
 
     encoded_images = []
     for image in images:
@@ -121,25 +183,25 @@ def process_pdf_for_rcts(pdf_path, phrase):
     rcts, patients = parse_rct_summary(summary)
     return os.path.basename(pdf_path), rcts, patients
 
-"""
+
 # Example usage
-folder_path = "./downloaded_committee_papers"
-phrase = "Statistical analysis and definition of study groups in"
+folder_path = "./50_Committee_Papers"
 
 results = []
 
 for filename in os.listdir(folder_path):
     if filename.lower().endswith(".pdf"):
         file_path = os.path.join(folder_path, filename)
-        pdf_name, rcts, patients = process_pdf_for_rcts(file_path, phrase)
+        pdf_name, rcts, patients = process_pdf_for_rcts(file_path)
         results.append({
             "PDF File": pdf_name,
             "Number of RCTs": rcts,
             "Number of Patients": patients
         })
+    print(f"{filename} processed")
 
 df_results = pd.DataFrame(results)
 print(df_results)
-"""
+
 # Optional: save to CSV
-# df_results.to_csv("rct_patients.csv", index=False)
+df_results.to_csv("rct_patients_50.csv", index=False)
